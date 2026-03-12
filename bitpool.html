@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bitpool TV Rotator</title>
+<style>
+html, body {
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  overflow:hidden;
+}
+
+/* wrapper allows scaling so dashboards fit on screen */
+#viewer-wrapper{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* scaled iframe so large dashboards fit on TV */
+#viewer{
+  border:none;
+  width:140vw;
+  height:140vh;
+  transform:scale(0.72);
+  transform-origin:top left;
+}
+</style>
+</head>
+<body>
+
+<div id="viewer-wrapper">
+  <iframe id="viewer"></iframe>
+</div>
+
+<script>
+
+/* --- pages to rotate --- */
+const pages = [
+  "https://app.bitpool.com/dashboards?pane=organisation&id=689e6d1544522e74c1cf9748",
+  "https://app.bitpool.com/dashboards?pane=organisation&id=689e6d1744522e74c1cf9865",
+  "https://app.bitpool.com/report-manager/report/689e75d78d60cb64a985d5a5",
+  "https://app.bitpool.com/report-manager/report/689e787f44522e74c1cf98c1",
+  "https://app.bitpool.com/dashboards?pane=organisation&id=689e6d1644522e74c1cf97f6"
+];
+
+/* --- rotation time --- */
+const ROTATION_MS = 10000; // 10 seconds
+
+let index = 0;
+const viewer = document.getElementById("viewer");
+
+function loadPage(){
+  viewer.src = pages[index];
+  index = (index + 1) % pages.length;
+}
+
+setInterval(loadPage, ROTATION_MS);
+loadPage();
+
+/* attempt fullscreen for TV display */
+function goFullscreen(){
+  const el = document.documentElement;
+  if(el.requestFullscreen){ el.requestFullscreen(); }
+}
+
+window.addEventListener("load", ()=>{
+  setTimeout(goFullscreen,500);
+});
+
+</script>
+
+</body>
+</html>
